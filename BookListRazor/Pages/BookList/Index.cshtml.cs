@@ -24,5 +24,20 @@ namespace BookListRazor.Pages.BookList
         {
             Books = await _db.Books.ToListAsync();
         }
+
+        public async Task<IActionResult> OnPostDelete(int id) // the parameter name should be the same as the one passed in the asp-route handler
+        {
+            var selectedBook = await _db.Books.FindAsync(id);
+
+            if (selectedBook == null)
+            {
+                return NotFound();
+            }
+
+            _db.Books.Remove(selectedBook);
+            await _db.SaveChangesAsync();
+
+            return RedirectToPage("Index");
+        }
     }
 }
